@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
+import DataTable from './DataTable';
 
 interface AppProps {
   name: string;
@@ -20,9 +20,7 @@ export default function App({ name }: AppProps) {
   return (
     <Container>
       <Container padding="1em">Hello {name}!</Container>
-      <Button variant="contained" color="primary">
-        Hola Mundo!
-      </Button>
+      <DataTable></DataTable>
     </Container>
   );
 }

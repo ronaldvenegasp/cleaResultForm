@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import DataTable from './DataTable';
+import SearchForm from './SearchForm';
 
 interface AppProps {
   name: string;
@@ -19,7 +20,7 @@ export const Container = styled.div<ContainerProps>`
 export default function App({ name }: AppProps) {
   return (
     <Container>
-      <Container padding="1em">Hello {name}!</Container>
+      <SearchForm></SearchForm>
       <DataTable></DataTable>
     </Container>
   );

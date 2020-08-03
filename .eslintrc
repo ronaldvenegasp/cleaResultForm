@@ -2,7 +2,8 @@
   "extends": [
     "wesbos",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "globals": {
     "chrome": true
@@ -16,7 +17,8 @@
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/camelcase": ["error", { "properties": "never" }]
+    "@typescript-eslint/camelcase": ["error", { "properties": "never" }],
+    "prettier/prettier": "warn"
   },
   "settings": {
     "import/parsers": {

@@ -1,27 +1,34 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, {ChangeEvent} from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 import DataTable from './DataTable';
 import SearchForm from './SearchForm';
-
-interface AppProps {
-  name: string;
-}
 
 type ContainerProps = {
   padding?: string | 0;
   margin?: string | 0;
 };
 
-export const Container = styled.div<ContainerProps>`
-  padding: ${props => ('padding' in props ? props.padding : '0')};
-  margin: ${props => ('margin' in props ? props.margin : 0)};
-`;
+export default function App() {
+  const handleSearchButton = (event: any) => {
+    event.preventDefault();
+    console.log('handleSearchButton');
+  };
 
-export default function App({ name }: AppProps) {
+  const handleInputChange = (event: ChangeEvent<{ value: string }>) => {
+    console.log(event);
+  }
+
   return (
-    <Container>
-      <SearchForm></SearchForm>
-      <DataTable></DataTable>
-    </Container>
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <SearchForm
+          ClickHandler={handleSearchButton}
+          ChangeHandler={handleInputChange}
+        ></SearchForm>
+        <DataTable></DataTable>
+      </Container>
+    </React.Fragment>
   );
 }

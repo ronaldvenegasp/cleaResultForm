@@ -39,6 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface SearchFormProps {
+  ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  ChangeHandler: (event: React.FormEvent<HTMLInputElement>) => any;
+}
+
 type FormContainerProps = {
   padding?: string | 0;
   margin?: string | 0;
@@ -49,7 +54,7 @@ export const FormContainer = styled.div<FormContainerProps>`
   margin: ${props => ('margin' in props ? props.margin : 0)};
 `;
 
-export default function SearchForm() {
+export default function SearchForm(Props: SearchFormProps) {
   const [state, setState] = useState({
     address: '',
     city: '',
@@ -75,16 +80,17 @@ export default function SearchForm() {
   const handleNormalizedChange = (event: any) =>
     setState({ ...state, normalized: !!event.target.value });
 
-  const handleSearchButton = (event: any) => {
+  /* const handleSearchButton = (event: any) => {
     event.preventDefault();
     console.log(state);
-  };
+  }; */
 
   return (
     <FormContainer>
       <h1>ARCHIVE SEARCH</h1>
       <form className={classes.root} noValidate autoComplete="off">
         <TextField
+          name="address"
           id="address-input"
           className={classes.addressField}
           label="Address"
@@ -99,7 +105,7 @@ export default function SearchForm() {
           }}
           variant="outlined"
           value={state.address}
-          onChange={handlerAddressChange}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
@@ -179,7 +185,7 @@ export default function SearchForm() {
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={handleSearchButton}
+          onClick={Props.ClickHandler}
         >
           Search
         </Button>

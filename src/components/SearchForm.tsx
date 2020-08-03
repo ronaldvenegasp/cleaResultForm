@@ -56,6 +56,7 @@ export default function SearchForm() {
     state: '',
     zip: 0,
     normalized: false,
+    data: [],
   });
 
   const classes = useStyles();
@@ -75,9 +76,47 @@ export default function SearchForm() {
   const handleNormalizedChange = (event: any) =>
     setState({ ...state, normalized: !!event.target.value });
 
+  // Put together the request URL with the data from the form
+  const getUrl = () => {
+    let url = `https://elastic.snaplogic.com:443/api/1/rest/slsched/feed/ClearesultDev/LegacyArchive/Working/AddressInventory?`;
+    if (state.address) {
+      url += `&address=${state.address}`;
+    }
+    if (state.city) {
+      url += `&city=${state.city}`;
+    }
+    if (state.state) {
+      url += `&state=${state.state}`;
+    }
+    if (state.zip && state.zip !== 0) {
+      url += `&zip=${state.zip}`;
+    }
+    return url;
+  };
+
   const handleSearchButton = (event: any) => {
     event.preventDefault();
-    console.log(state);
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+
+    const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
+    const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
+
+    const requestObject = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
+      },
+    };
+
+    fetch(proxyUrl + getUrl(), requestObject)
+      .then(response => response.json())
+      .then(data => {
+        state.data = data;
+        // Print the received data in the console
+        console.log(state.data);
+      })
+      .catch(error => console.log(error));
   };
 
   return (

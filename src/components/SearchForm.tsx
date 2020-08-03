@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +58,7 @@ export default function SearchForm() {
     state: '',
     zip: 0,
     normalized: false,
+    loadingData: false,
     data: [],
   });
 
@@ -97,6 +99,9 @@ export default function SearchForm() {
 
   const handleSearchButton = (event: any) => {
     event.preventDefault();
+    setState({ ...state, loadingData: true });
+
+    // Use a proxyURL because a CORS problem
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
     const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
@@ -115,6 +120,7 @@ export default function SearchForm() {
     // fetch(proxyUrl + getUrl(), requestObject)
     //   .then(response => response.json())
     //   .then(data => {
+    //     setState({ ...state, loadingData: false });
     //     state.data = data;
     //     // Print the received data in the console
     //     console.log(state.data);
@@ -130,10 +136,14 @@ export default function SearchForm() {
         Authorization: `Bearer ${bearerToken}`,
         'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
       },
-    }).then(response => {
-      state.data = response.data;
-      console.log(state.data);
-    });
+    })
+      .then(response => {
+        setState({ ...state, loadingData: false });
+        state.data = response.data;
+        // Print the received data in the console
+        console.log(state.data);
+      })
+      .catch(error => console.error(error));
   };
 
   return (
@@ -240,6 +250,12 @@ export default function SearchForm() {
           Search
         </Button>
       </form>
+      {state.loadingData && (
+        <div>
+          <span>Loading data...</span>
+          <CircularProgress color="primary" />
+        </div>
+      )}
     </FormContainer>
   );
 }

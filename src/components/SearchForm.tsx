@@ -102,22 +102,38 @@ export default function SearchForm() {
     const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
     const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
 
-    const requestObject = {
+    /* ============================================================== */
+    // GET Request to the client's API with fetch()
+    // const requestObject = {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: `Bearer ${bearerToken}`,
+    //     'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
+    //   },
+    // };
+
+    // fetch(proxyUrl + getUrl(), requestObject)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     state.data = data;
+    //     // Print the received data in the console
+    //     console.log(state.data);
+    //   })
+    //   .catch(error => console.log(error));
+    /* ============================================================== */
+
+    // GET Request to the client's API with Axios
+    axios({
       method: 'GET',
+      url: proxyUrl + getUrl(),
       headers: {
         Authorization: `Bearer ${bearerToken}`,
         'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
       },
-    };
-
-    fetch(proxyUrl + getUrl(), requestObject)
-      .then(response => response.json())
-      .then(data => {
-        state.data = data;
-        // Print the received data in the console
-        console.log(state.data);
-      })
-      .catch(error => console.log(error));
+    }).then(response => {
+      state.data = response.data;
+      console.log(state.data);
+    });
   };
 
   return (

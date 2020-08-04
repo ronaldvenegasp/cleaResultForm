@@ -1,5 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
-import axios from 'axios';
+import React from 'react';
 import styled from 'styled-components';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -8,7 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,6 +39,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface SearchFormProps {
+  ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  ChangeHandler: (event: any) => void;
+  FormState: FormState;
+}
+
+interface FormState {
+  address: string;
+  city: string;
+  state: string;
+  zip: number;
+  normalized: boolean;
+}
+
 type FormContainerProps = {
   padding?: string | 0;
   margin?: string | 0;
@@ -51,106 +63,15 @@ export const FormContainer = styled.div<FormContainerProps>`
   margin: ${props => ('margin' in props ? props.margin : 0)};
 `;
 
-export default function SearchForm() {
-  const [state, setState] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zip: 0,
-    normalized: false,
-    loadingData: false,
-    data: [],
-  });
-
+export default function SearchForm(Props: SearchFormProps) {
   const classes = useStyles();
-
-  const handlerAddressChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, address: event.target.value });
-
-  const handlerCityChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, city: event.target.value });
-
-  const handlerStateChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, state: event.target.value });
-
-  const handlerZipChange = (event: any) =>
-    setState({ ...state, zip: parseInt(event.target.value) });
-
-  const handleNormalizedChange = (event: any) =>
-    setState({ ...state, normalized: !!event.target.value });
-
-  // Put together the request URL with the data from the form
-  const getUrl = () => {
-    let url = `https://elastic.snaplogic.com:443/api/1/rest/slsched/feed/ClearesultDev/LegacyArchive/Working/AddressInventory?`;
-    if (state.address) {
-      url += `&address=${state.address}`;
-    }
-    if (state.city) {
-      url += `&city=${state.city}`;
-    }
-    if (state.state) {
-      url += `&state=${state.state}`;
-    }
-    if (state.zip && state.zip !== 0) {
-      url += `&zip=${state.zip}`;
-    }
-    return url;
-  };
-
-  const handleSearchButton = (event: any) => {
-    event.preventDefault();
-    setState({ ...state, loadingData: true });
-
-    // Use a proxyURL because a CORS problem
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-
-    const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
-    const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
-
-    /* ============================================================== */
-    // GET Request to the client's API with fetch()
-    // const requestObject = {
-    //   method: 'GET',
-    //   headers: {
-    //     Authorization: `Bearer ${bearerToken}`,
-    //     'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
-    //   },
-    // };
-
-    // fetch(proxyUrl + getUrl(), requestObject)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     setState({ ...state, loadingData: false });
-    //     state.data = data;
-    //     // Print the received data in the console
-    //     console.log(state.data);
-    //   })
-    //   .catch(error => console.log(error));
-    /* ============================================================== */
-
-    // GET Request to the client's API with Axios
-    axios({
-      method: 'GET',
-      url: proxyUrl + getUrl(),
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-        'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
-      },
-    })
-      .then(response => {
-        setState({ ...state, loadingData: false });
-        state.data = response.data;
-        // Print the received data in the console
-        console.log(state.data);
-      })
-      .catch(error => console.error(error));
-  };
 
   return (
     <FormContainer>
       <h1>ARCHIVE SEARCH</h1>
       <form className={classes.root} noValidate autoComplete="off">
         <TextField
+          name="address"
           id="address-input"
           className={classes.addressField}
           label="Address"
@@ -164,11 +85,12 @@ export default function SearchForm() {
             shrink: true,
           }}
           variant="outlined"
-          value={state.address}
-          onChange={handlerAddressChange}
+          value={Props.FormState.address}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="city"
           id="city-input"
           className={classes.textField}
           label="City"
@@ -182,11 +104,12 @@ export default function SearchForm() {
             shrink: true,
           }}
           variant="outlined"
-          value={state.city}
-          onChange={handlerCityChange}
+          value={Props.FormState.city}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="state"
           id="state-input"
           className={classes.textField}
           label="State"
@@ -200,11 +123,12 @@ export default function SearchForm() {
             shrink: true,
           }}
           variant="outlined"
-          value={state.state}
-          onChange={handlerStateChange}
+          value={Props.FormState.state}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="zip"
           id="zip-input"
           className={classes.textField}
           label="Zip code"
@@ -218,8 +142,8 @@ export default function SearchForm() {
             shrink: true,
           }}
           variant="outlined"
-          value={state.zip}
-          onChange={handlerZipChange}
+          value={Props.FormState.zip}
+          onChange={Props.ChangeHandler}
         />
 
         <FormControl
@@ -229,14 +153,15 @@ export default function SearchForm() {
         >
           <InputLabel id="normalized-label">Normalized</InputLabel>
           <Select
+            name="normalized"
             labelId="normalized-label"
             id="normalized-input"
-            value={state.normalized ? 1 : 0}
             label="Normalized"
-            onChange={handleNormalizedChange}
+            value={Props.FormState.normalized}
+            onChange={Props.ChangeHandler}
           >
-            <MenuItem value={1}>true</MenuItem>
-            <MenuItem value={0}>false</MenuItem>
+            <MenuItem value="true">true</MenuItem>
+            <MenuItem value="false">false</MenuItem>
           </Select>
         </FormControl>
 
@@ -245,17 +170,11 @@ export default function SearchForm() {
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={handleSearchButton}
+          onClick={Props.ClickHandler}
         >
           Search
         </Button>
       </form>
-      {state.loadingData && (
-        <div>
-          <span>Loading data...</span>
-          <CircularProgress color="primary" />
-        </div>
-      )}
     </FormContainer>
   );
 }

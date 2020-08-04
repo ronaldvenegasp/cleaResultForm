@@ -4,6 +4,8 @@ import Container from '@material-ui/core/Container';
 import DataTable from './DataTable';
 import SearchForm from './SearchForm';
 
+import '../styles/index.scss';
+
 type ContainerProps = {
   padding?: string | 0;
   margin?: string | 0;

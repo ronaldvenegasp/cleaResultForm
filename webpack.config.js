@@ -18,6 +18,11 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.s?css$/i,
+        exclude: /node_modules/,
+        use: ['style-loader', 'css-loader?sourceMap=true', 'sass-loader']
+      },
     ],
   },
   resolve: {

@@ -4,7 +4,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchForm from './SearchForm';
-// import DataTable from './DataTable';
+import DataTable from './DataTable';
+import '../styles/index.scss';
 
 export default function App() {
   const [state, setState] = useState({
@@ -66,6 +67,20 @@ export default function App() {
       .catch(error => console.error(error));
   };
 
+export default function App() {
+  const [state, setState] = useState({
+    address: '',
+    city: '',
+    state: '',
+    zip: 0,
+    normalized: false,
+  });
+
+  const handleSearchButton = (event: any) => {
+    event.preventDefault();
+    console.log(state);
+  };
+
   const handleInputChange = (
     event: ChangeEvent<{ value: string; name: string }>
   ) => setState({ ...state, [event.target.name]: event.target.value });
@@ -85,7 +100,7 @@ export default function App() {
             <CircularProgress color="primary" />
           </div>
         )}
-        {/* <DataTable data={state.data}></DataTable> */}
+        <DataTable></DataTable>
       </Container>
     </React.Fragment>
   );

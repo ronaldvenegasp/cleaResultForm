@@ -25,11 +25,7 @@ export default function App() {
 
   const handleInputChange = (
     event: ChangeEvent<{ value: string; name: string }>
-  ) => {
-    console.log('value', event.target.value);
-    console.log('name', event.target.name);
-    setState({ ...state, [event.target.name]: event.target.value });
-  };
+  ) => setState({ ...state, [event.target.name]: event.target.value });
 
   return (
     <React.Fragment>

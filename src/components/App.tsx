@@ -31,7 +31,7 @@ export default function App() {
     event.preventDefault();
     setState({ ...state, loadingData: true });
 
-    // Use a proxyURL because a CORS problem
+    // Use a proxyURL for a CORS problem
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
     const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
@@ -65,20 +65,6 @@ export default function App() {
         console.log(response.data);
       })
       .catch(error => console.error(error));
-  };
-
-export default function App() {
-  const [state, setState] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zip: 0,
-    normalized: false,
-  });
-
-  const handleSearchButton = (event: any) => {
-    event.preventDefault();
-    console.log(state);
   };
 
   const handleInputChange = (

@@ -17,23 +17,21 @@ const useStyles = makeStyles((theme: Theme) =>
     addressField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
-      width: '50ch',
-      size: 'small',
+      width: '52ch',
+      margin: 8,
     },
     textField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: '25ch',
-      size: 'small',
+      margin: 8,
     },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
-      size: 'small',
     },
     button: {
       margin: theme.spacing(1),
-      size: 'small',
       height: '5ch',
     },
   })
@@ -73,76 +71,46 @@ export default function SearchForm(Props: SearchFormProps) {
         <TextField
           name="address"
           id="address-input"
-          className={classes.addressField}
           label="Address"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="Address"
-          helperText="Address input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.address}
+          className={classes.addressField}
           onChange={Props.ChangeHandler}
         />
 
         <TextField
           name="city"
           id="city-input"
-          className={classes.textField}
           label="City"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="City"
-          helperText="City input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.city}
+          className={classes.textField}
           onChange={Props.ChangeHandler}
         />
 
         <TextField
           name="state"
           id="state-input"
-          className={classes.textField}
           label="State"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="State"
-          helperText="State input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.state}
+          className={classes.textField}
           onChange={Props.ChangeHandler}
         />
 
         <TextField
           name="zip"
           id="zip-input"
-          className={classes.textField}
           label="Zip code"
           type="number"
-          style={{ margin: 8, width: '15ch' }}
-          placeholder="Zip code"
-          helperText="Zip code input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.zip}
+          style={{ width: '15ch' }}
+          inputProps={{ min: '0' }}
+          className={classes.textField}
           onChange={Props.ChangeHandler}
         />
 
@@ -154,7 +122,6 @@ export default function SearchForm(Props: SearchFormProps) {
           <InputLabel id="normalized-label">Normalized</InputLabel>
           <Select
             name="normalized"
-            labelId="normalized-label"
             id="normalized-input"
             label="Normalized"
             value={Props.FormState.normalized}

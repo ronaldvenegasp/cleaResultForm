@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -41,7 +41,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface SearchFormProps {
   ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  ChangeHandler: (event: React.FormEvent<HTMLInputElement>) => any;
+  ChangeHandler: (event: any) => void;
+  FormState: FormState;
+}
+
+interface FormState {
+  address: string;
+  city: string;
+  state: string;
+  zip: number;
+  normalized: boolean;
 }
 
 type FormContainerProps = {
@@ -55,35 +64,7 @@ export const FormContainer = styled.div<FormContainerProps>`
 `;
 
 export default function SearchForm(Props: SearchFormProps) {
-  const [state, setState] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zip: 0,
-    normalized: false,
-  });
-
   const classes = useStyles();
-
-  const handlerAddressChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, address: event.target.value });
-
-  const handlerCityChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, city: event.target.value });
-
-  const handlerStateChange = (event: ChangeEvent<{ value: string }>) =>
-    setState({ ...state, state: event.target.value });
-
-  const handlerZipChange = (event: any) =>
-    setState({ ...state, zip: parseInt(event.target.value) });
-
-  const handleNormalizedChange = (event: any) =>
-    setState({ ...state, normalized: !!event.target.value });
-
-  /* const handleSearchButton = (event: any) => {
-    event.preventDefault();
-    console.log(state);
-  }; */
 
   return (
     <FormContainer>
@@ -104,11 +85,12 @@ export default function SearchForm(Props: SearchFormProps) {
             shrink: true,
           }}
           variant="outlined"
-          value={state.address}
+          value={Props.FormState.address}
           onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="city"
           id="city-input"
           className={classes.textField}
           label="City"
@@ -122,11 +104,12 @@ export default function SearchForm(Props: SearchFormProps) {
             shrink: true,
           }}
           variant="outlined"
-          value={state.city}
-          onChange={handlerCityChange}
+          value={Props.FormState.city}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="state"
           id="state-input"
           className={classes.textField}
           label="State"
@@ -140,11 +123,12 @@ export default function SearchForm(Props: SearchFormProps) {
             shrink: true,
           }}
           variant="outlined"
-          value={state.state}
-          onChange={handlerStateChange}
+          value={Props.FormState.state}
+          onChange={Props.ChangeHandler}
         />
 
         <TextField
+          name="zip"
           id="zip-input"
           className={classes.textField}
           label="Zip code"
@@ -158,8 +142,8 @@ export default function SearchForm(Props: SearchFormProps) {
             shrink: true,
           }}
           variant="outlined"
-          value={state.zip}
-          onChange={handlerZipChange}
+          value={Props.FormState.zip}
+          onChange={Props.ChangeHandler}
         />
 
         <FormControl
@@ -169,14 +153,15 @@ export default function SearchForm(Props: SearchFormProps) {
         >
           <InputLabel id="normalized-label">Normalized</InputLabel>
           <Select
+            name="normalized"
             labelId="normalized-label"
             id="normalized-input"
-            value={state.normalized ? 1 : 0}
             label="Normalized"
-            onChange={handleNormalizedChange}
+            value={Props.FormState.normalized}
+            onChange={Props.ChangeHandler}
           >
-            <MenuItem value={1}>true</MenuItem>
-            <MenuItem value={0}>false</MenuItem>
+            <MenuItem value="true">true</MenuItem>
+            <MenuItem value="false">false</MenuItem>
           </Select>
         </FormControl>
 

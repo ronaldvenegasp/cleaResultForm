@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { data } from '../data/data.ts';
+import { data } from '../data/data';
 
 interface RowProps {
   SiteId: string;
@@ -46,7 +46,9 @@ function Row(props: { row: RowProps }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">{row.SiteId}</TableCell>
+        <TableCell component="th" scope="row">
+          {row.SiteId}
+        </TableCell>
         <TableCell align="right">{row.Name}</TableCell>
         <TableCell align="right">{row.Address}</TableCell>
         <TableCell align="right">{row.City}</TableCell>

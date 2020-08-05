@@ -13,7 +13,7 @@ export default function App() {
     city: '',
     state: '',
     zip: 0,
-    normalized: false,
+    normalized: '',
     loadingData: false,
     data: [],
   });
@@ -45,10 +45,7 @@ export default function App() {
     //   },
     // })
     //   .then(response => response.json())
-    //   .then(data => {
-    //     setState({ ...state, loadingData: false, data });
-    //     console.log(response.data);
-    //   })
+    //   .then(data => setState({ ...state, loadingData: false, data }))
     //   .catch(error => console.log(error));
 
     // GET Request to the client's API with Axios
@@ -60,10 +57,9 @@ export default function App() {
         'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
       },
     })
-      .then(response => {
-        setState({ ...state, loadingData: false, data: response.data });
-        console.log(response.data);
-      })
+      .then(response =>
+        setState({ ...state, loadingData: false, data: response.data })
+      )
       .catch(error => console.error(error));
   };
 

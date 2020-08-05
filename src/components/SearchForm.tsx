@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     addressField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
-      width: '52ch',
+      width: '50ch',
       margin: 8,
     },
     textField: {
@@ -48,7 +48,7 @@ interface FormState {
   city: string;
   state: string;
   zip: number;
-  normalized: boolean;
+  normalized: string;
 }
 
 type FormContainerProps = {
@@ -61,7 +61,7 @@ export const FormContainer = styled.div<FormContainerProps>`
   margin: ${props => ('margin' in props ? props.margin : 0)};
 `;
 
-export default function SearchForm(Props: SearchFormProps) {
+export default function SearchForm(props: SearchFormProps) {
   const classes = useStyles();
 
   return (
@@ -76,7 +76,7 @@ export default function SearchForm(Props: SearchFormProps) {
           size="small"
           variant="outlined"
           className={classes.addressField}
-          onChange={Props.ChangeHandler}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
@@ -87,7 +87,7 @@ export default function SearchForm(Props: SearchFormProps) {
           size="small"
           variant="outlined"
           className={classes.textField}
-          onChange={Props.ChangeHandler}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
@@ -98,7 +98,7 @@ export default function SearchForm(Props: SearchFormProps) {
           size="small"
           variant="outlined"
           className={classes.textField}
-          onChange={Props.ChangeHandler}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
@@ -111,7 +111,7 @@ export default function SearchForm(Props: SearchFormProps) {
           style={{ width: '15ch' }}
           inputProps={{ min: '0' }}
           className={classes.textField}
-          onChange={Props.ChangeHandler}
+          onChange={props.ChangeHandler}
         />
 
         <FormControl
@@ -124,8 +124,8 @@ export default function SearchForm(Props: SearchFormProps) {
             name="normalized"
             id="normalized-input"
             label="Normalized"
-            value={Props.FormState.normalized}
-            onChange={Props.ChangeHandler}
+            value={props.FormState.normalized}
+            onChange={props.ChangeHandler}
           >
             <MenuItem value="true">true</MenuItem>
             <MenuItem value="false">false</MenuItem>
@@ -137,7 +137,7 @@ export default function SearchForm(Props: SearchFormProps) {
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={Props.ClickHandler}
+          onClick={props.ClickHandler}
         >
           Search
         </Button>

@@ -1,0 +1,15 @@
+.form-container {
+  background-color: #efefef;
+  display: 'flex';
+  flex-wrap: 'wrap';
+}
+
+.form-container__title {
+  font-size: $m-size;
+  margin: 0;
+}
+
+.form-container__subtitle {
+  font-size: $s-size;
+  margin-top: 0;
+}

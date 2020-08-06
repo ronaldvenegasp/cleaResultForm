@@ -10,47 +10,87 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    addressField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: '50ch',
-      size: 'small',
-    },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
+      margin: theme.spacing(1),
       width: '25ch',
-      size: 'small',
+      [`& fieldset`]: {
+        borderRadius: 0,
+      },
+      '& .MuiOutlinedInput-root': {
+        '&:hover fieldset': {
+          borderColor: 'red',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'red',
+        },
+      },
+      '&:hover label': {
+        color: 'red',
+      },
+      '& label.Mui-focused': {
+        color: 'red',
+      },
     },
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 120,
-      size: 'small',
+      minWidth: '25ch',
+      [`& fieldset`]: {
+        borderRadius: 0,
+      },
+      '& .MuiOutlinedInput-root': {
+        '&:hover fieldset': {
+          borderColor: 'red',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'red',
+        },
+      },
+      '&:hover label': {
+        color: 'red',
+      },
+      '& label.Mui-focused': {
+        color: 'red',
+      },
     },
-    button: {
+    buttonSearch: {
       margin: theme.spacing(1),
-      size: 'small',
       height: '5ch',
+      width: '15ch',
+      color: 'white',
+      background: 'red',
+      '&:hover': {
+        background: 'black',
+      },
+      border: 0,
+      borderRadius: 0,
+    },
+    buttonClear: {
+      margin: theme.spacing(1),
+      height: '5ch',
+      width: '15ch',
+      color: 'red',
+      border: 0,
+      borderRadius: 0,
+    },
+    label: {
+      textTransform: 'capitalize',
     },
   })
 );
 
 interface SearchFormProps {
-  ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  ChangeHandler: (event: any) => void;
-  FormState: FormState;
+  clickSearchHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  clickClearHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  changeHandler: (event: any) => void;
+  formState: FormState;
 }
 
 interface FormState {
   address: string;
   city: string;
   state: string;
-  zip: number;
-  normalized: boolean;
+  zip: string;
+  normalized: string;
 }
 
 type FormContainerProps = {
@@ -63,102 +103,83 @@ export const FormContainer = styled.div<FormContainerProps>`
   margin: ${props => ('margin' in props ? props.margin : 0)};
 `;
 
-export default function SearchForm(Props: SearchFormProps) {
+export default function SearchForm(props: SearchFormProps) {
   const classes = useStyles();
+  const { address, city, state, zip } = props.formState;
+  const buttonSearchDisabled = !address || !city || !state || !zip;
+  const buttonClearDisabled = !address && !city && !state && !zip;
 
   return (
-    <FormContainer>
-      <h1>ARCHIVE SEARCH</h1>
-      <form className={classes.root} noValidate autoComplete="off">
+    <FormContainer padding="1.2rem" margin="1.6rem" className="form-container">
+      <h2 className="form-container__title">Welcome to Data Archive</h2>
+      <p className="form-container__subtitle">Start a search</p>
+      <form noValidate autoComplete="off">
         <TextField
+          type="string"
           name="address"
           id="address-input"
-          className={classes.addressField}
           label="Address"
-          type="string"
-          style={{ margin: 8 }}
-          placeholder="Address"
-          helperText="Address input"
+          helperText="*Required"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.address}
-          onChange={Props.ChangeHandler}
+          classes={{
+            root: classes.textField,
+          }}
+          value={props.formState.address}
+          onChange={props.changeHandler}
         />
 
         <TextField
+          type="string"
           name="city"
           id="city-input"
-          className={classes.textField}
           label="City"
-          type="string"
-          style={{ margin: 8 }}
-          placeholder="City"
-          helperText="City input"
+          helperText="*Required"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.city}
-          onChange={Props.ChangeHandler}
+          className={classes.textField}
+          value={props.formState.city}
+          onChange={props.changeHandler}
         />
 
         <TextField
+          type="string"
           name="state"
           id="state-input"
-          className={classes.textField}
           label="State"
-          type="string"
-          style={{ margin: 8 }}
-          placeholder="State"
-          helperText="State input"
+          helperText="*Required"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.state}
-          onChange={Props.ChangeHandler}
+          className={classes.textField}
+          value={props.formState.state}
+          onChange={props.changeHandler}
         />
 
         <TextField
+          type="string"
           name="zip"
           id="zip-input"
-          className={classes.textField}
           label="Zip code"
-          type="number"
-          style={{ margin: 8, width: '15ch' }}
-          placeholder="Zip code"
-          helperText="Zip code input"
+          helperText="*Required"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.zip}
-          onChange={Props.ChangeHandler}
+          className={classes.textField}
+          value={props.formState.zip}
+          onChange={props.changeHandler}
         />
 
         <FormControl
+          size="small"
           variant="outlined"
           className={classes.formControl}
-          size="small"
         >
-          <InputLabel id="normalized-label">Normalized</InputLabel>
+          <InputLabel>Normalized</InputLabel>
           <Select
-            name="normalized"
-            labelId="normalized-label"
             id="normalized-input"
+            name="normalized"
             label="Normalized"
-            value={Props.FormState.normalized}
-            onChange={Props.ChangeHandler}
+            value={props.formState.normalized}
+            onChange={props.changeHandler}
           >
             <MenuItem value="true">true</MenuItem>
             <MenuItem value="false">false</MenuItem>
@@ -167,12 +188,27 @@ export default function SearchForm(Props: SearchFormProps) {
 
         <Button
           type="submit"
+          color="secondary"
           variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={Props.ClickHandler}
+          disabled={buttonSearchDisabled}
+          classes={{
+            root: classes.buttonSearch,
+            label: classes.label,
+          }}
+          onClick={props.clickSearchHandler}
         >
           Search
+        </Button>
+        <Button
+          color="secondary"
+          disabled={buttonClearDisabled}
+          classes={{
+            root: classes.buttonClear,
+            label: classes.label,
+          }}
+          onClick={props.clickClearHandler}
+        >
+          Clear
         </Button>
       </form>
     </FormContainer>

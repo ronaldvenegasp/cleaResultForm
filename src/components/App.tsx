@@ -7,16 +7,29 @@ import SearchForm from './SearchForm';
 import DataTable from './DataTable';
 import '../styles/index.scss';
 
+/*
+ * Use a proxyURL because a CORS problem
+ * Bearer token and Subscription key pendig to define where they come from
+ */
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
+const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
+
 export default function App() {
   const [state, setState] = useState({
     address: '',
     city: '',
     state: '',
-    zip: 0,
-    normalized: false,
+    zip: '',
+    normalized: '',
     loadingData: false,
     data: [],
   });
+
+  // Set the state values with the data from the form
+  const handleInputChange = (
+    event: ChangeEvent<{ value: string; name: string }>
+  ) => setState({ ...state, [event.target.name]: event.target.value });
 
   // Put together the request URL with the data from the form
   const getUrl = () => {
@@ -27,29 +40,22 @@ export default function App() {
     return url;
   };
 
+  const handleClearButton = (event: any) => {
+    event.preventDefault();
+    setState({
+      ...state,
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      normalized: '',
+      loadingData: false,
+    });
+  };
+
   const handleSearchButton = (event: any) => {
     event.preventDefault();
     setState({ ...state, loadingData: true });
-
-    // Use a proxyURL because a CORS problem
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
-    const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
-
-    // GET Request to the client's API with fetch()
-    // fetch(proxyUrl + getUrl(), {
-    //   method: 'GET',
-    //   headers: {
-    //     Authorization: `Bearer ${bearerToken}`,
-    //     'Ocp-Apim-Subscription-Key': `${subscriptionKey}`,
-    //   },
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     setState({ ...state, loadingData: false, data });
-    //     console.log(response.data);
-    //   })
-    //   .catch(error => console.log(error));
 
     // GET Request to the client's API with Axios
     axios({
@@ -67,37 +73,20 @@ export default function App() {
       .catch(error => console.error(error));
   };
 
-export default function App() {
-  const [state, setState] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zip: 0,
-    normalized: false,
-  });
-
-  const handleSearchButton = (event: any) => {
-    event.preventDefault();
-    console.log(state);
-  };
-
-  const handleInputChange = (
-    event: ChangeEvent<{ value: string; name: string }>
-  ) => setState({ ...state, [event.target.name]: event.target.value });
-
   return (
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="lg">
         <SearchForm
-          ClickHandler={handleSearchButton}
-          ChangeHandler={handleInputChange}
-          FormState={state}
+          clickSearchHandler={handleSearchButton}
+          clickClearHandler={handleClearButton}
+          changeHandler={handleInputChange}
+          formState={state}
         ></SearchForm>
         {state.loadingData && (
           <div>
             <span>Loading data...</span>
-            <CircularProgress color="primary" />
+            <CircularProgress color="secondary" />
           </div>
         )}
         <DataTable></DataTable>

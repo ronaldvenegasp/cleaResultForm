@@ -13,7 +13,7 @@ export default function App() {
     city: '',
     state: '',
     zip: 0,
-    normalized: false,
+    normalized: '',
     loadingData: false,
     data: [],
   });
@@ -31,7 +31,7 @@ export default function App() {
     event.preventDefault();
     setState({ ...state, loadingData: true });
 
-    // Use a proxyURL because a CORS problem
+    // Use a proxyURL for a CORS problem
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const bearerToken = 'dUSRGkaryQyUJ02XF97i9PdW2DpRV9yI';
     const subscriptionKey = '36493c4771434328aa9e5522248e91a3';
@@ -45,10 +45,7 @@ export default function App() {
     //   },
     // })
     //   .then(response => response.json())
-    //   .then(data => {
-    //     setState({ ...state, loadingData: false, data });
-    //     console.log(response.data);
-    //   })
+    //   .then(data => setState({ ...state, loadingData: false, data }))
     //   .catch(error => console.log(error));
 
     // GET Request to the client's API with Axios
@@ -62,23 +59,10 @@ export default function App() {
     })
       .then(response => {
         setState({ ...state, loadingData: false, data: response.data });
-        console.log(response.data);
-      })
+        console.log(state.data);
+      }
+      )
       .catch(error => console.error(error));
-  };
-
-export default function App() {
-  const [state, setState] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zip: 0,
-    normalized: false,
-  });
-
-  const handleSearchButton = (event: any) => {
-    event.preventDefault();
-    console.log(state);
   };
 
   const handleInputChange = (

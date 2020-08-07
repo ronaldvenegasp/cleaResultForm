@@ -18,22 +18,20 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: '50ch',
-      size: 'small',
+      margin: 8,
     },
     textField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: '25ch',
-      size: 'small',
+      margin: 8,
     },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
-      size: 'small',
     },
     button: {
       margin: theme.spacing(1),
-      size: 'small',
       height: '5ch',
     },
   })
@@ -50,7 +48,7 @@ interface FormState {
   city: string;
   state: string;
   zip: number;
-  normalized: boolean;
+  normalized: string;
 }
 
 type FormContainerProps = {
@@ -63,7 +61,7 @@ export const FormContainer = styled.div<FormContainerProps>`
   margin: ${props => ('margin' in props ? props.margin : 0)};
 `;
 
-export default function SearchForm(Props: SearchFormProps) {
+export default function SearchForm(props: SearchFormProps) {
   const classes = useStyles();
 
   return (
@@ -73,77 +71,47 @@ export default function SearchForm(Props: SearchFormProps) {
         <TextField
           name="address"
           id="address-input"
-          className={classes.addressField}
           label="Address"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="Address"
-          helperText="Address input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.address}
-          onChange={Props.ChangeHandler}
+          className={classes.addressField}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
           name="city"
           id="city-input"
-          className={classes.textField}
           label="City"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="City"
-          helperText="City input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.city}
-          onChange={Props.ChangeHandler}
+          className={classes.textField}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
           name="state"
           id="state-input"
-          className={classes.textField}
           label="State"
           type="string"
-          style={{ margin: 8 }}
-          placeholder="State"
-          helperText="State input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.state}
-          onChange={Props.ChangeHandler}
+          className={classes.textField}
+          onChange={props.ChangeHandler}
         />
 
         <TextField
           name="zip"
           id="zip-input"
-          className={classes.textField}
           label="Zip code"
           type="number"
-          style={{ margin: 8, width: '15ch' }}
-          placeholder="Zip code"
-          helperText="Zip code input"
           size="small"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="outlined"
-          value={Props.FormState.zip}
-          onChange={Props.ChangeHandler}
+          style={{ width: '15ch' }}
+          inputProps={{ min: '0' }}
+          className={classes.textField}
+          onChange={props.ChangeHandler}
         />
 
         <FormControl
@@ -154,11 +122,10 @@ export default function SearchForm(Props: SearchFormProps) {
           <InputLabel id="normalized-label">Normalized</InputLabel>
           <Select
             name="normalized"
-            labelId="normalized-label"
             id="normalized-input"
             label="Normalized"
-            value={Props.FormState.normalized}
-            onChange={Props.ChangeHandler}
+            value={props.FormState.normalized}
+            onChange={props.ChangeHandler}
           >
             <MenuItem value="true">true</MenuItem>
             <MenuItem value="false">false</MenuItem>
@@ -170,7 +137,7 @@ export default function SearchForm(Props: SearchFormProps) {
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={Props.ClickHandler}
+          onClick={props.ClickHandler}
         >
           Search
         </Button>

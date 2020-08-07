@@ -68,8 +68,9 @@ export default function App() {
     })
       .then(response => {
         setState({ ...state, loadingData: false, data: response.data });
-        console.log(response.data);
-      })
+        console.log(state.data);
+      }
+      )
       .catch(error => console.error(error));
   };
 
